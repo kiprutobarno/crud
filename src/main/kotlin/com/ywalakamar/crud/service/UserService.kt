@@ -9,6 +9,13 @@ import com.ywalakamar.crud.exception.UserNotFoundException
 
 @Service
 class UserService(private val repo:UserRepository) {
+	
+	fun create(user:User):User =repo.save(user)
+	
+	fun readAll():List<User> = repo.findAll()
+	
+	fun readOne(id:Int):User=repo.findById(id).orElseThrow{UserNotFoundException(HttpStatus.NOT_FOUND, "User not found")}
+	
 	fun update(userId:Int, user:User):User{
 		return if(repo.existsById(userId)){
 			repo.save(

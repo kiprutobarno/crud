@@ -1,6 +1,5 @@
 package com.ywalakamar.crud.controllers
 
-import com.ywalakamar.crud.repository.UserRepository
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,23 +15,20 @@ import com.ywalakamar.crud.service.UserService
 
 @RestController
 @RequestMapping("/api")
-class UserController(private val repo:UserRepository, private val service:UserService){
+class UserController(private val service:UserService){
 	@PutMapping("/users/{id}")
 	fun updateUser(@PathVariable("id") userId:Int, @RequestBody newUser:User):User=service.update(userId, newUser)
 	
 	@PostMapping("/users")
 	@ResponseStatus(HttpStatus.CREATED)
-	fun createUser(@RequestBody user:User):User=repo.save(user)
+	fun createUser(@RequestBody user:User):User=service.create(user)
 	
 	@GetMapping("/users")
-	fun getUsers():List<User> = repo.findAll()
+	fun getUsers():List<User> = service.readAll()
 	
 	@GetMapping("/users/{id}")
-	fun getUserById(@PathVariable(value="id") userId:Int):ResponseEntity<User>{
-		return repo.findById(userId).map{
-				user->ResponseEntity.ok(user)
-		}.orElse(ResponseEntity.notFound().build())
-	}
+	fun getUserById(@PathVariable("id") userId:Int):User=service.readOne(userId)
+	
 	
 	
 }
