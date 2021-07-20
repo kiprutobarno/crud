@@ -11,10 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.PutMapping
+import com.ywalakamar.crud.service.UserService
 
 @RestController
 @RequestMapping("/api")
-class UserController(private val repo:UserRepository){
+class UserController(private val repo:UserRepository, private val service:UserService){
+	@PutMapping("/users/{id}")
+	fun updateUser(@PathVariable("id") userId:Int, @RequestBody newUser:User):User=service.update(userId, newUser)
 	
 	@PostMapping("/users")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -29,4 +33,6 @@ class UserController(private val repo:UserRepository){
 				user->ResponseEntity.ok(user)
 		}.orElse(ResponseEntity.notFound().build())
 	}
+	
+	
 }
