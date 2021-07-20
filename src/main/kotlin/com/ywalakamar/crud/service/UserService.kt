@@ -16,8 +16,8 @@ class UserService(private val repo:UserRepository) {
 	
 	fun readOne(id:Int):User=repo.findById(id).orElseThrow{UserNotFoundException(HttpStatus.NOT_FOUND, "User not found")}
 	
-	fun update(userId:Int, user:User):User{
-		return if(repo.existsById(userId)){
+	fun update(id:Int, user:User):User{
+		return if(repo.existsById(id)){
 			repo.save(
 				User(
 					id=user.id,
@@ -28,5 +28,11 @@ class UserService(private val repo:UserRepository) {
 				)
 			)
 		}	else throw UserNotFoundException(HttpStatus.NOT_FOUND, "User not found")
+	}
+	
+	fun delete(id:Int){
+		return if(repo.existsById(id)){
+			repo.deleteById(id)
+		}else throw UserNotFoundException(HttpStatus.NOT_FOUND, "User not found")
 	}
 }
