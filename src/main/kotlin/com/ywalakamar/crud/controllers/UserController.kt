@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PutMapping
 import com.ywalakamar.crud.service.UserService
+import org.springframework.web.bind.annotation.DeleteMapping
 
 @RestController
 @RequestMapping("/api")
 class UserController(private val service:UserService){
+	
 	@PutMapping("/users/{id}")
 	fun updateUser(@PathVariable("id") userId:Int, @RequestBody newUser:User):User=service.update(userId, newUser)
 	
@@ -28,6 +30,9 @@ class UserController(private val service:UserService){
 	
 	@GetMapping("/users/{id}")
 	fun getUserById(@PathVariable("id") userId:Int):User=service.readOne(userId)
+	
+	@DeleteMapping("/users/{id}")
+	fun deleteUser(@PathVariable("id") userId:Int):Unit=service.delete(userId)
 	
 	
 	
